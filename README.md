@@ -1,4 +1,5 @@
 # Python_teoria_y_ejemplos
+
 Para contribuir a este proyecto, debes reaizar los siguientes pasos:
 
 ~~~bs
