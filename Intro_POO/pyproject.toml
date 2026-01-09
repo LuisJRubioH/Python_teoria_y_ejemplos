@@ -1,0 +1,7 @@
+[project]
+name = "intro-poo"
+version = "0.1.0"
+description = "Gestión de biblioteca"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = []
