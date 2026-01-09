@@ -1,4 +1,4 @@
-# Python_teoria_y_ejemplos
+# Python teoria y ejemplos
 
 Para contribuir a este proyecto, debes reaizar los siguientes pasos:
 
