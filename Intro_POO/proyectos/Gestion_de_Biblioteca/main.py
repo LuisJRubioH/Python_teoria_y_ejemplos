@@ -1,54 +1,40 @@
-class Libro:
-    
-    #  definimos los atribustos de instancia
-    def  __init__(self, titulo, autor, isbn, disponible = True):
-        self.titulo = titulo
-        self.autor = autor
-        self.isbn = isbn
-        self.disponible = disponible
-        self.__veces_prestado = 0
-    
-    # contruimos los métodos de instancia
-
-    def __str__(self):
-        return f"{self.titulo} por {self.autor}, disponible: {self.disponible}"
+from biblioteca import Biblioteca
+from data import data_libros, data_estudiantes
+from exceptions import BibliotecaError
+from exceptions import UsuarioNoEncontradoError
+from libros import Libro, LibroFisico, LibroDigital
+from persistencia import Persistencia
+from usuarios import Estudiante, Profesor, SolicitanteProtocol
 
 
-    def prestar(self):
-        if self.disponible:
-            self.disponible = False
-            self.__veces_prestado += 1
-            return f"El libro '{self.titulo}' fue prestado exitosamente- Total prestamos: {self.__veces_prestado}"
-        return f"El libro '{self.titulo}' no está disponible para préstamo"
-
-    def devolver(self):
-        self.disponible = True
-        return f"El libro '{self.titulo}' ha sido devuelto y disponible nuevamente"
-
-    def espopular(self):
-        return self.veces_prestado > 5
-#  método getter para veces_prestado
-    def get_veces_prestado(self):
-        return self.__veces_prestado
-
-    def set_veces_prestado(self, veces_prestado):
-        self.__veces_prestado = veces_prestado
+persistencia = Persistencia()
+biblioteca =persistencia.cargar_datos()
 
 
-# Ejemplo de uso de la clase Libro
+print("*"*20)
+print("Bienbenido a la Biblioteca Central 📚📚📚")
+print("*"*20)
+print("📕 Libros disponibles:")
+for libro in biblioteca.libros_disponibles():
+    print(libro.descripcion_completa)
+print()
 
-mi_libro = Libro("Cien años de soledad", "Gabriel Garcia Márquez", "978-3-16-148410-0", True)
-otro_libro = Libro("Pedro Páramo", "Juan Rulfo", "978-1-23-456789-0", True)
+cedula = input("Ingrese la cédula del usuario: ")
+try:
+    usuario = biblioteca.buscar_usuario(cedula)
+    print(f"CC: {usuario.cedula} - Usuario: {usuario.nombre}")
+except UsuarioNoEncontradoError:
+    print("El usuario no fue encontrado.")
 
-print(mi_libro.prestar())
-print(mi_libro.devolver())
+tirulo = input("Ingrese el título del libro que desea solicitar: ")
+try:
+    libro = biblioteca.buscar_libro(tirulo)
+    mensaje = usuario.solicitar_libro(tirulo)
+    print("\n")
+    print(mensaje)
+    prestamo = libro.prestar()
+    print("\n",prestamo)
+except UsuarioNoEncontradoError as e:
+    print(f"Error: {e}")
 
-
-mi_libro.set_veces_prestado(6)
-print(mi_libro.get_veces_prestado())
-
-catalogo = [mi_libro, otro_libro]
-
-for libro in catalogo:
-    print(libro)
-
+persistencia.guardar_datos(biblioteca)
